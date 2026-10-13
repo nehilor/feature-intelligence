@@ -1,6 +1,6 @@
 # Feature Intelligence
 
-**Status:** Design and specification phase — no application runtime, APIs, or UI are implemented yet.
+**Status:** SPEC-001 application foundation implemented (health check, dev tooling). Product features (SPEC-002+) are not implemented yet.
 
 ## Problem statement
 
@@ -99,12 +99,65 @@ Not in scope for this assessment:
 │   ├── EVALUATION.md
 │   ├── SECURITY-AND-RELIABILITY.md
 │   └── adr/               # Architecture decision records
-└── specs/                 # Numbered executable specifications (future)
+├── backend/               # FastAPI application (SPEC-001)
+├── frontend/              # React + Vite shell (SPEC-001)
+├── Makefile               # verify, dev, test, lint
+└── specs/                 # Executable specifications SPEC-001–006
 ```
+
+## Local development (SPEC-001)
+
+### Prerequisites
+
+- Python 3.9+
+- Node.js 20+ and npm
+
+### Environment
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` if needed. AI credentials are **not** required for the foundation.
+
+### Backend setup
+
+```bash
+cd backend
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+cd ..
+```
+
+### Frontend setup
+
+```bash
+cd frontend
+npm install
+cd ..
+```
+
+### Run
+
+```bash
+make backend-dev    # API at http://localhost:8000
+make frontend-dev   # UI at http://localhost:5173
+```
+
+Health check: `GET http://localhost:8000/api/health` → `{"status":"ok"}`
+
+### Verification
+
+```bash
+make verify
+```
+
+Runs backend lint/tests and frontend lint/typecheck/tests.
 
 ## Current status
 
-- **Done:** Architecture and design documentation; agent governance; executable specifications **SPEC-001** through **SPEC-006** (see [specs/](specs/README.md))
-- **Not started:** Application implementation — no runtime frontend/backend, dependencies, migrations, tests, or deployed environments yet
+**Implemented:** [SPEC-001](specs/SPEC-001-project-foundation.md) — FastAPI backend, React/Vite frontend shell, SQLite wiring, `/api/health`, `make verify`, baseline tests.
 
-Implementation will proceed **spec-by-spec** in order (SPEC-001 → SPEC-006). No product or AI functionality should be claimed until the relevant spec is implemented and verified.
+**Planned (not implemented):** [SPEC-002](specs/SPEC-002-feature-request-core.md) through [SPEC-006](specs/SPEC-006-ai-evaluation-and-submission-hardening.md) — feature requests, AI triage, relationships, priority/decisions, evaluation harness.
+
+Implementation continues **spec-by-spec** in order.
