@@ -11,29 +11,25 @@ afterEach(() => {
 })
 
 describe('App', () => {
-  it('renders the application shell', () => {
-    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')))
-    render(<App />)
-    expect(screen.getByRole('heading', { level: 1, name: 'Feature Intelligence' })).toBeInTheDocument()
-    expect(screen.getByText(/application foundation is running/i)).toBeInTheDocument()
-  })
-
-  it('renders connected health state', async () => {
+  it('renders product shell and discovery area', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => ({ status: 'ok' }),
+      vi.fn().mockImplementation((input: RequestInfo | URL) => {
+        const url = String(input)
+        if (url.includes('/api/health')) {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({ status: 'ok' }),
+          })
+        }
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ items: [], total: 0, limit: 10, offset: 0 }),
+        })
       }),
     )
     render(<App />)
-    expect(await screen.findByText('Connected')).toBeInTheDocument()
-  })
-
-  it('does not crash when backend is unavailable', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')))
-    render(<App />)
-    expect(await screen.findByText('Unavailable')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /retry connection/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Feature Intelligence' })).toBeInTheDocument()
+    expect(await screen.findByText(/no feature requests yet/i)).toBeInTheDocument()
   })
 })

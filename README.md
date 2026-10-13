@@ -1,6 +1,6 @@
 # Feature Intelligence
 
-**Status:** SPEC-001 application foundation implemented (health check, dev tooling). Product features (SPEC-002+) are not implemented yet.
+**Status:** SPEC-001 foundation and SPEC-002 feature request core implemented. AI capabilities (SPEC-003+) are not implemented yet.
 
 ## Problem statement
 
@@ -118,7 +118,7 @@ Not in scope for this assessment:
 cp .env.example .env
 ```
 
-Edit `.env` if needed. AI credentials are **not** required for the foundation.
+Edit `.env` if needed. AI credentials are **not** required for SPEC-001 or SPEC-002.
 
 ### Backend setup
 
@@ -154,10 +154,30 @@ make verify
 
 Runs backend lint/tests and frontend lint/typecheck/tests.
 
+### Demo seed (SPEC-002)
+
+Load deterministic sample requests (resets existing feature-request data in the configured SQLite database):
+
+```bash
+make seed
+```
+
+### Feature request API (SPEC-002)
+
+- `POST /api/feature-requests` — submit title + description (status defaults to `SUBMITTED`)
+- `GET /api/feature-requests` — list with `q`, `sort` (`recent` | `supported`), `limit`, `offset`, optional `supporter_key`
+- `GET /api/feature-requests/{id}` — detail (optional `supporter_key` for `supported_by_current_user`)
+- `POST /api/feature-requests/{id}/support` — anonymous support via opaque `supporter_key`
+
+The UI supports discovery, search, sort, pagination, submit, detail view, and Support / Supported states using a browser-local supporter key.
+
 ## Current status
 
-**Implemented:** [SPEC-001](specs/SPEC-001-project-foundation.md) — FastAPI backend, React/Vite frontend shell, SQLite wiring, `/api/health`, `make verify`, baseline tests.
+**Implemented:**
 
-**Planned (not implemented):** [SPEC-002](specs/SPEC-002-feature-request-core.md) through [SPEC-006](specs/SPEC-006-ai-evaluation-and-submission-hardening.md) — feature requests, AI triage, relationships, priority/decisions, evaluation harness.
+- [SPEC-001](specs/SPEC-001-project-foundation.md) — application foundation, `/api/health`, `make verify`
+- [SPEC-002](specs/SPEC-002-feature-request-core.md) — feature requests, deterministic search, anonymous support, demo seed
+
+**Planned (not implemented):** [SPEC-003](specs/SPEC-003-ai-feature-triage.md) through [SPEC-006](specs/SPEC-006-ai-evaluation-and-submission-hardening.md) — AI triage, relationships, priority/decisions, evaluation harness.
 
 Implementation continues **spec-by-spec** in order.

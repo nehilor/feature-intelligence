@@ -1,4 +1,4 @@
-.PHONY: backend-dev frontend-dev test test-backend test-frontend lint lint-backend lint-frontend typecheck verify
+.PHONY: backend-dev frontend-dev test test-backend test-frontend lint lint-backend lint-frontend typecheck verify seed
 
 BACKEND_DIR := backend
 FRONTEND_DIR := frontend
@@ -31,3 +31,6 @@ typecheck:
 	cd $(FRONTEND_DIR) && npm run typecheck
 
 verify: lint-backend test-backend lint-frontend typecheck test-frontend
+
+seed:
+	cd $(BACKEND_DIR) && .venv/bin/python scripts/seed.py

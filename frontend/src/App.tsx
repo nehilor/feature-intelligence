@@ -1,33 +1,21 @@
-import { useApiHealth } from './hooks/useApiHealth'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
+import { Layout } from './components/Layout'
+import { DiscoverPage } from './pages/DiscoverPage'
+import { DetailPage } from './pages/DetailPage'
+import { SubmitPage } from './pages/SubmitPage'
 import './App.css'
 
-function statusLabel(status: 'checking' | 'connected' | 'unavailable'): string {
-  switch (status) {
-    case 'checking':
-      return 'Checking'
-    case 'connected':
-      return 'Connected'
-    case 'unavailable':
-      return 'Unavailable'
-  }
-}
-
 export default function App() {
-  const { status, retry } = useApiHealth()
-
   return (
-    <main className="shell">
-      <h1>Feature Intelligence</h1>
-      <p className="tagline">Application foundation is running.</p>
-      <section className="status-card" aria-live="polite">
-        <h2>API status</h2>
-        <p className={`status-value status-${status}`}>{statusLabel(status)}</p>
-        {status === 'unavailable' ? (
-          <button type="button" className="retry" onClick={retry}>
-            Retry connection
-          </button>
-        ) : null}
-      </section>
-    </main>
+    <BrowserRouter>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<DiscoverPage />} />
+          <Route path="/requests/new" element={<SubmitPage />} />
+          <Route path="/requests/:requestId" element={<DetailPage />} />
+        </Routes>
+      </Layout>
+    </BrowserRouter>
   )
 }
