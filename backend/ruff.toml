@@ -4,3 +4,4 @@ src = ["app", "tests"]
 
 [lint]
 select = ["E", "F", "I", "UP"]
+ignore = ["UP007"]

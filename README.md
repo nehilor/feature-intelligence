@@ -1,6 +1,6 @@
 # Feature Intelligence
 
-**Status:** SPEC-001 foundation and SPEC-002 feature request core implemented. AI capabilities (SPEC-003+) are not implemented yet.
+**Status:** SPEC-001 foundation, SPEC-002 feature request core, and SPEC-003 AI Feature Triage are implemented. SPEC-004+ remain planned.
 
 ## Problem statement
 
@@ -118,7 +118,7 @@ Not in scope for this assessment:
 cp .env.example .env
 ```
 
-Edit `.env` if needed. AI credentials are **not** required for SPEC-001 or SPEC-002.
+Edit `.env` if needed. AI credentials are **not** required for core product flows or `make verify` (tests use mock providers). Live triage requires provider keys in `.env` only on the server.
 
 ### Backend setup
 
@@ -171,13 +171,46 @@ make seed
 
 The UI supports discovery, search, sort, pagination, submit, detail view, and Support / Supported states using a browser-local supporter key.
 
+### AI Feature Triage (SPEC-003)
+
+- `POST /api/feature-requests/{id}/analysis` — run triage (returns existing valid analysis when present)
+- `GET /api/feature-requests/{id}/analysis` — current analysis state
+
+**Providers:** OpenAI primary, Google Gemini 2.5 Flash fallback (failover only — not model voting).
+
+**Structured output:** Provider-native JSON/schema where available, then mandatory Pydantic validation (`feature_triage_v1` prompt). Processing states: `AI_COMPLETE`, `AI_PARTIAL` (low confidence), `MANUAL_REVIEW_REQUIRED`.
+
+**Configuration (backend `.env`):**
+
+| Variable | Purpose |
+| --- | --- |
+| `AI_ENABLED` | `false` disables provider calls; core app still works |
+| `AI_PRIMARY_PROVIDER` | Default `openai` |
+| `AI_FALLBACK_PROVIDER` | Default `gemini` |
+| `OPENAI_API_KEY` / `OPENAI_MODEL` | Primary provider (model must be set for OpenAI use) |
+| `GEMINI_API_KEY` / `GEMINI_MODEL` | Fallback (default model `gemini-2.5-flash`) |
+| `AI_REQUEST_TIMEOUT_SECONDS` | Per-request timeout (default `30`) |
+
+**Failure behavior:** Missing keys or provider errors do not block startup or feature-request CRUD. When both providers fail or AI is disabled, analysis returns `MANUAL_REVIEW_REQUIRED` without mutating the original request text.
+
+**Optional live validation (not part of `make verify`):**
+
+```bash
+cd backend && .venv/bin/python scripts/live_triage_smoke.py
+```
+
+Requires `OPENAI_API_KEY` and `OPENAI_MODEL` in the environment. Skips safely when unset.
+
+Not implemented yet: embeddings, semantic duplicate detection, priority scoring, decision briefs, or evaluation harness (SPEC-004–006).
+
 ## Current status
 
 **Implemented:**
 
 - [SPEC-001](specs/SPEC-001-project-foundation.md) — application foundation, `/api/health`, `make verify`
 - [SPEC-002](specs/SPEC-002-feature-request-core.md) — feature requests, deterministic search, anonymous support, demo seed
+- [SPEC-003](specs/SPEC-003-ai-feature-triage.md) — AI Feature Triage, provider abstraction, structured analysis persistence
 
-**Planned (not implemented):** [SPEC-003](specs/SPEC-003-ai-feature-triage.md) through [SPEC-006](specs/SPEC-006-ai-evaluation-and-submission-hardening.md) — AI triage, relationships, priority/decisions, evaluation harness.
+**Planned (not implemented):** [SPEC-004](specs/SPEC-004-semantic-relationship-intelligence.md) through [SPEC-006](specs/SPEC-006-ai-evaluation-and-submission-hardening.md) — semantic relationships, priority/decisions, evaluation harness.
 
 Implementation continues **spec-by-spec** in order.

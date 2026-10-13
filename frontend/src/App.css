@@ -129,6 +129,42 @@ button.secondary,
 }
 
 .request-description,
+.analysis-panel {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.analysis-advisory {
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.analysis-warning {
+  color: #b45309;
+  font-weight: 500;
+}
+
+.analysis-meta {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.analysis-fields {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.analysis-fields dt {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.analysis-fields dd {
+  margin: 0;
+}
+
 .detail-description {
   color: #334155;
   line-height: 1.5;
