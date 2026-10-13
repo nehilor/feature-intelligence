@@ -1,64 +1,68 @@
-# Evaluation (planned)
+# Evaluation
 
-This document defines **how** Feature Intelligence AI components will be evaluated once implemented. **No results, benchmarks, or production metrics exist yet.**
+Feature Intelligence separates **deterministic software tests** (`make verify`) from **probabilistic AI evaluation** (`make eval` / `make eval-live`).
 
-## Objectives
+## Golden datasets (version controlled)
 
-- Measure quality of classification and extraction against labeled examples.
-- Track operational health (latency, structured-output reliability, manual-review burden).
-- Compare prompt/model changes using consistent datasets and versioning ([AI-DESIGN.md](AI-DESIGN.md)).
-
-## Golden datasets (planned)
-
-Each dataset is a curated, version-controlled collection of inputs and expected labels (or acceptable label sets). Format and storage location will be defined in the first AI-related numbered spec.
-
-### Duplicate / related / distinct classification
-
-- **Inputs:** Pairs or small clusters of feature requests (title + description).
-- **Labels:** duplicate | related | distinct (per pair or cluster policy).
-- **Use:** Regression tests for relationship step; precision/recall per class.
-
-### Theme classification
-
-- **Inputs:** Single requests or normalized need text.
-- **Labels:** One or more themes from a fixed taxonomy (exact set TBD in spec).
-- **Use:** Accuracy and confusion analysis; manual review of low-confidence cases.
-
-### Underlying-need extraction
-
-- **Inputs:** Solution-oriented request text.
-- **Labels:** Reference need statements (or rubric-scored human judgments).
-- **Use:** Semantic similarity or human rubric scoring; track regression when prompts change.
-
-## Planned metrics
-
-| Metric | Applies to | Notes |
+| Dataset | Version | Location |
 | --- | --- | --- |
-| Precision | Relationship, theme | Per-class and macro where useful |
-| Recall | Relationship, theme | Especially for duplicate detection |
-| Accuracy | Theme (single-label cases) | Not sufficient alone for imbalanced classes |
-| Structured-output success rate | All LLM steps | % runs passing schema validation without retry exhaustion |
-| Latency | End-to-end triage, per step | p50/p95 targets TBD in NFR specs |
-| Manual-review rate | Pipeline | % requests entering `MANUAL_REVIEW_REQUIRED` or human override |
+| Relationship classification | `relationships_v1` | `backend/evals/datasets/relationships.json` |
+| Theme classification | `themes_v1` | `backend/evals/datasets/themes.json` |
+| Underlying need concepts | `underlying_needs_v1` | `backend/evals/datasets/underlying_needs.json` |
 
-Additional tracking (not claimed now):
+Schemas are validated with Pydantic before metrics run. Invalid gold data fails loudly.
 
-- Inter-rater agreement when building gold labels
-- Cost per triage (tokens) for provider comparison
+## Offline evaluation (`make eval`)
 
-## Evaluation workflow (planned)
+- **Mode:** offline frozen predictions
+- **Fixtures:** `backend/evals/fixtures/*_predictions.json`
+- **Purpose:** regression harness for metric code, schema gates, and prompt-change workflow — **not** a claim of live model quality
+- **Network / credits:** none
 
-1. **Offline:** Run pipeline or individual steps against frozen dataset versions; store predictions with prompt/model ids.
-2. **Compare:** Diff metrics against baseline commit or previous prompt version.
-3. **Gate:** Spec acceptance may require minimum metrics on gold sets before merge (thresholds TBD per spec).
-4. **Online (later):** Sample production/manual review for drift; out of scope until a deployed environment exists.
+Regression baselines live in `backend/evals/fixtures/baselines.json`.
 
-## Non-goals (evaluation phase)
+### Relationship metrics
 
-- Public leaderboard or invented benchmark scores in README/marketing copy
-- Fully automated merge approval based on model confidence alone
-- Multi-tenant A/B infrastructure
+- Accuracy, per-class precision/recall/F1, macro F1
+- Explicit DUPLICATE precision and DUPLICATE recall
+- Text confusion matrix (DUPLICATE / RELATED / DISTINCT)
 
-## Reporting
+**Zero-division policy:** precision/recall/F1 use `0.0` when denominators are zero (no NaN).
 
-When implementation begins, evaluation runs should produce reproducible artifacts (command, dataset version, git sha, metric summary) checked into CI logs or a reports directory per spec — not fabricated numbers in documentation.
+### Theme metrics
+
+- Accuracy (primary)
+- Failure list for misclassified case IDs
+
+### Underlying need
+
+- **Concept recall** = matched expected concepts / total expected concepts (per case)
+- Case pass if recall ≥ 0.5 (documented threshold)
+- Not exact string match; not a perfect semantic metric — see limitations in SPEC-006
+
+### Structured output reliability
+
+- Success rate = valid structured outputs / attempted outputs across frozen prediction records and schema stress cases
+
+## Live evaluation (`make eval-live`)
+
+- Opt-in only; never runs under `make verify` or `make eval`
+- Uses configured primary provider by default (`AI_EVAL_PROVIDER=openai|gemini` optional)
+- Reports prompt versions (`feature_triage_v1`, `relationship_classification_v1`), provider, model, dataset versions
+- Limit cases with `EVAL_MAX_CASES`
+- Results may be written under `backend/evals/results/` (gitignored)
+
+Any numeric live result must be labeled as an **assessment-scale benchmark**, not production evidence.
+
+## Prompt regression workflow
+
+```text
+change prompt → increment prompt version → run same golden dataset → compare metrics → accept or reject
+```
+
+Do not change prompt semantics without version bumps.
+
+## Non-goals
+
+- Enterprise ML platforms, auto prompt optimization, fabricated README accuracy claims
+- Using live model scores as CI gates for this assessment

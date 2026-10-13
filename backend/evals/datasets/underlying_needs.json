@@ -1,0 +1,86 @@
+{
+  "dataset_version": "underlying_needs_v1",
+  "cases": [
+    {
+      "case_id": "need-001",
+      "title": "Monthly finance analytics in Excel",
+      "description": "Our finance team needs monthly analytics in Excel so they can reconcile results outside the platform.",
+      "expected_concepts": [
+        "finance reconciliation",
+        "reporting outside the product",
+        "recurring monthly analysis"
+      ],
+      "forbidden_or_irrelevant_concepts": ["dark mode", "mobile app"]
+    },
+    {
+      "case_id": "need-002",
+      "title": "Export reports to CSV",
+      "description": "Operations needs CSV export of dashboard reporting for offline analysis.",
+      "expected_concepts": [
+        "export reporting data",
+        "offline analysis",
+        "spreadsheet workflow"
+      ]
+    },
+    {
+      "case_id": "need-003",
+      "title": "Enterprise SSO",
+      "description": "Enterprise customers must authenticate using corporate identity providers.",
+      "expected_concepts": [
+        "enterprise authentication",
+        "identity provider",
+        "SSO login"
+      ]
+    },
+    {
+      "case_id": "need-004",
+      "title": "Slack notifications",
+      "description": "Teams want product activity pushed into Slack channels.",
+      "expected_concepts": [
+        "team notifications",
+        "Slack channel alerts",
+        "activity awareness"
+      ]
+    },
+    {
+      "case_id": "need-005",
+      "title": "Dark mode",
+      "description": "Users working at night want reduced eye strain from bright UI.",
+      "expected_concepts": [
+        "visual comfort",
+        "dark theme",
+        "nighttime usage"
+      ]
+    },
+    {
+      "case_id": "need-006",
+      "title": "Salesforce integration",
+      "description": "Keep CRM records in sync with Salesforce for sales workflows.",
+      "expected_concepts": [
+        "CRM sync",
+        "Salesforce",
+        "sales workflow automation"
+      ]
+    },
+    {
+      "case_id": "need-007",
+      "title": "Improve page load speed",
+      "description": "Dashboard pages feel sluggish when datasets are large.",
+      "expected_concepts": [
+        "performance",
+        "faster dashboard load",
+        "large dataset handling"
+      ]
+    },
+    {
+      "case_id": "need-008",
+      "title": "Role-based access control",
+      "description": "Administrators need to assign permissions by role across the product.",
+      "expected_concepts": [
+        "permissions",
+        "role-based access",
+        "admin governance"
+      ]
+    }
+  ]
+}

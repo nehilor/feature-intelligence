@@ -1,0 +1,9 @@
+{
+  "baseline_version": "eval_baselines_v1",
+  "relationship_macro_f1_min": 1.0,
+  "relationship_duplicate_precision_min": 1.0,
+  "relationship_duplicate_recall_min": 1.0,
+  "theme_accuracy_min": 1.0,
+  "underlying_need_mean_recall_min": 1.0,
+  "structured_output_success_rate_min": 1.0
+}

@@ -1,0 +1,95 @@
+{
+  "fixture_version": "relationship_predictions_v1",
+  "predictions": [
+    {
+      "case_id": "relationship-001",
+      "predicted_relationship": "DUPLICATE",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-002",
+      "predicted_relationship": "RELATED",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-003",
+      "predicted_relationship": "DISTINCT",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-004",
+      "predicted_relationship": "RELATED",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-005",
+      "predicted_relationship": "RELATED",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-006",
+      "predicted_relationship": "DUPLICATE",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-007",
+      "predicted_relationship": "RELATED",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-008",
+      "predicted_relationship": "DISTINCT",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-009",
+      "predicted_relationship": "RELATED",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-010",
+      "predicted_relationship": "DISTINCT",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-011",
+      "predicted_relationship": "DUPLICATE",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-012",
+      "predicted_relationship": "RELATED",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-013",
+      "predicted_relationship": "DISTINCT",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-014",
+      "predicted_relationship": "RELATED",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-015",
+      "predicted_relationship": "RELATED",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-016",
+      "predicted_relationship": "DISTINCT",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-017",
+      "predicted_relationship": "RELATED",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "relationship-018",
+      "predicted_relationship": "DISTINCT",
+      "structured_output_valid": true
+    }
+  ]
+}

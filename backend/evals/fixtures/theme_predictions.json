@@ -1,0 +1,65 @@
+{
+  "fixture_version": "theme_predictions_v1",
+  "predictions": [
+    {
+      "case_id": "theme-001",
+      "predicted_theme": "REPORTING_AND_DATA",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "theme-002",
+      "predicted_theme": "REPORTING_AND_DATA",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "theme-003",
+      "predicted_theme": "AUTHENTICATION_AND_ACCESS",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "theme-004",
+      "predicted_theme": "AUTHENTICATION_AND_ACCESS",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "theme-005",
+      "predicted_theme": "INTEGRATIONS_AND_AUTOMATION",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "theme-006",
+      "predicted_theme": "COLLABORATION_AND_NOTIFICATIONS",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "theme-007",
+      "predicted_theme": "USER_EXPERIENCE",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "theme-008",
+      "predicted_theme": "MOBILE",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "theme-009",
+      "predicted_theme": "ADMINISTRATION_AND_GOVERNANCE",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "theme-010",
+      "predicted_theme": "PERFORMANCE_AND_RELIABILITY",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "theme-011",
+      "predicted_theme": "OTHER",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "theme-012",
+      "predicted_theme": "INTEGRATIONS_AND_AUTOMATION",
+      "structured_output_valid": true
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Architecture (proposed)
 
-This document describes the **planned** high-level architecture for Feature Intelligence during the assessment challenge and a plausible production evolution. Nothing below is implemented yet.
+This document describes the high-level architecture for Feature Intelligence as implemented in the technical assessment, plus a plausible production evolution path.
 
 ## Goals
 

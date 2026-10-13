@@ -1,0 +1,21 @@
+{
+  "fixture_version": "structured_output_v1",
+  "cases": [
+    {
+      "case_id": "schema-001",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "schema-002",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "schema-003",
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "schema-004",
+      "structured_output_valid": true
+    }
+  ]
+}

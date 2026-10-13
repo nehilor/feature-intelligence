@@ -1,4 +1,4 @@
-.PHONY: backend-dev frontend-dev test test-backend test-frontend lint lint-backend lint-frontend typecheck verify seed
+.PHONY: backend-dev frontend-dev test test-backend test-frontend lint lint-backend lint-frontend typecheck verify seed eval eval-live demo-reset demo-setup-canonical
 
 BACKEND_DIR := backend
 FRONTEND_DIR := frontend
@@ -22,7 +22,7 @@ test-frontend:
 lint: lint-backend lint-frontend
 
 lint-backend:
-	cd $(BACKEND_DIR) && .venv/bin/ruff check app tests
+	cd $(BACKEND_DIR) && .venv/bin/ruff check app tests evals
 
 lint-frontend:
 	cd $(FRONTEND_DIR) && npm run lint
@@ -34,3 +34,15 @@ verify: lint-backend test-backend lint-frontend typecheck test-frontend
 
 seed:
 	cd $(BACKEND_DIR) && .venv/bin/python scripts/seed.py
+
+eval:
+	cd $(BACKEND_DIR) && .venv/bin/python scripts/run_eval.py
+
+eval-live:
+	cd $(BACKEND_DIR) && .venv/bin/python scripts/run_eval_live.py
+
+demo-reset:
+	cd $(BACKEND_DIR) && .venv/bin/python scripts/demo_reset.py
+
+demo-setup-canonical:
+	cd $(BACKEND_DIR) && .venv/bin/python scripts/demo_setup_canonical_priority.py

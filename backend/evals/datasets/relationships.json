@@ -1,0 +1,275 @@
+{
+  "dataset_version": "relationships_v1",
+  "cases": [
+    {
+      "case_id": "relationship-001",
+      "request_a": {
+        "title": "Export reports to CSV",
+        "description": "Operations needs CSV export of dashboard reporting for offline analysis."
+      },
+      "request_b": {
+        "title": "CSV export for dashboards",
+        "description": "Allow exporting analytics dashboard tables to CSV files."
+      },
+      "expected_relationship": "DUPLICATE",
+      "brief_gold_rationale": "Same reporting export capability expressed with different wording.",
+      "tags": ["reporting"],
+      "difficulty": "easy"
+    },
+    {
+      "case_id": "relationship-002",
+      "request_a": {
+        "title": "Export reports to CSV",
+        "description": "Operations needs CSV export of dashboard reporting for offline analysis."
+      },
+      "request_b": {
+        "title": "Download dashboard data",
+        "description": "Users want spreadsheet-friendly exports of dashboard metrics."
+      },
+      "expected_relationship": "RELATED",
+      "brief_gold_rationale": "Both concern getting analytics out of the product but CSV vs generic download may differ in scope.",
+      "tags": ["reporting"],
+      "difficulty": "medium"
+    },
+    {
+      "case_id": "relationship-003",
+      "request_a": {
+        "title": "Export reports to CSV",
+        "description": "Operations needs CSV export of dashboard reporting for offline analysis."
+      },
+      "request_b": {
+        "title": "Dark mode",
+        "description": "Users want a dark UI theme for nighttime work."
+      },
+      "expected_relationship": "DISTINCT",
+      "brief_gold_rationale": "Reporting export vs visual theme are unrelated product areas.",
+      "tags": ["false-merge-risk"],
+      "difficulty": "easy"
+    },
+    {
+      "case_id": "relationship-004",
+      "request_a": {
+        "title": "Monthly finance analytics in Excel",
+        "description": "Finance needs monthly analytics in Excel to reconcile outside the platform."
+      },
+      "request_b": {
+        "title": "Export reports to CSV",
+        "description": "Operations needs CSV export of dashboard reporting for offline analysis."
+      },
+      "expected_relationship": "RELATED",
+      "brief_gold_rationale": "Both move reporting data outside the product for finance workflows but formats and cadence differ.",
+      "tags": ["reporting", "demo"],
+      "difficulty": "medium"
+    },
+    {
+      "case_id": "relationship-005",
+      "request_a": {
+        "title": "Slack notifications",
+        "description": "Send important product events to a Slack channel."
+      },
+      "request_b": {
+        "title": "Email alerts for mentions",
+        "description": "Notify users by email when they are mentioned in comments."
+      },
+      "expected_relationship": "RELATED",
+      "brief_gold_rationale": "Both are notification channels for product activity.",
+      "tags": ["notifications"],
+      "difficulty": "easy"
+    },
+    {
+      "case_id": "relationship-006",
+      "request_a": {
+        "title": "Enterprise SSO",
+        "description": "Customers need SAML/OIDC login through corporate identity providers."
+      },
+      "request_b": {
+        "title": "SAML single sign-on",
+        "description": "Support SAML SSO for enterprise tenants."
+      },
+      "expected_relationship": "DUPLICATE",
+      "brief_gold_rationale": "Same enterprise authentication need.",
+      "tags": ["auth"],
+      "difficulty": "easy"
+    },
+    {
+      "case_id": "relationship-007",
+      "request_a": {
+        "title": "Enterprise SSO",
+        "description": "Customers need SAML/OIDC login through corporate identity providers."
+      },
+      "request_b": {
+        "title": "Role-based access control",
+        "description": "Admins need granular roles and permissions inside the app."
+      },
+      "expected_relationship": "RELATED",
+      "brief_gold_rationale": "Authentication and authorization are adjacent but not identical requests.",
+      "tags": ["auth", "admin"],
+      "difficulty": "medium"
+    },
+    {
+      "case_id": "relationship-008",
+      "request_a": {
+        "title": "Mobile offline mode",
+        "description": "Field users need read-only access when offline on phones."
+      },
+      "request_b": {
+        "title": "Dark mode",
+        "description": "Users want a dark UI theme for nighttime work."
+      },
+      "expected_relationship": "DISTINCT",
+      "brief_gold_rationale": "Mobile offline capability vs desktop theme preference.",
+      "tags": ["mobile"],
+      "difficulty": "easy"
+    },
+    {
+      "case_id": "relationship-009",
+      "request_a": {
+        "title": "Salesforce integration",
+        "description": "Sync accounts and opportunities with Salesforce CRM."
+      },
+      "request_b": {
+        "title": "HubSpot integration",
+        "description": "Push leads and deals into HubSpot marketing automation."
+      },
+      "expected_relationship": "RELATED",
+      "brief_gold_rationale": "Both are CRM integrations with different vendors.",
+      "tags": ["integrations"],
+      "difficulty": "medium"
+    },
+    {
+      "case_id": "relationship-010",
+      "request_a": {
+        "title": "Salesforce integration",
+        "description": "Sync accounts and opportunities with Salesforce CRM."
+      },
+      "request_b": {
+        "title": "Dark mode",
+        "description": "Users want a dark UI theme for nighttime work."
+      },
+      "expected_relationship": "DISTINCT",
+      "brief_gold_rationale": "CRM integration vs UI theme.",
+      "tags": ["false-merge-risk"],
+      "difficulty": "easy"
+    },
+    {
+      "case_id": "relationship-011",
+      "request_a": {
+        "title": "Audit log export",
+        "description": "Compliance teams need exportable audit logs for governance reviews."
+      },
+      "request_b": {
+        "title": "Admin activity audit trail",
+        "description": "Record administrator actions with immutable audit history."
+      },
+      "expected_relationship": "DUPLICATE",
+      "brief_gold_rationale": "Both request auditable admin activity evidence.",
+      "tags": ["admin"],
+      "difficulty": "medium"
+    },
+    {
+      "case_id": "relationship-012",
+      "request_a": {
+        "title": "Improve page load speed",
+        "description": "Dashboard pages feel slow on large datasets; need faster initial render."
+      },
+      "request_b": {
+        "title": "Reduce API latency",
+        "description": "Backend endpoints should respond faster under load."
+      },
+      "expected_relationship": "RELATED",
+      "brief_gold_rationale": "Performance concerns but frontend vs backend focus differs.",
+      "tags": ["performance"],
+      "difficulty": "hard"
+    },
+    {
+      "case_id": "relationship-013",
+      "request_a": {
+        "title": "Bulk user import",
+        "description": "Admins want CSV import to provision many users at once."
+      },
+      "request_b": {
+        "title": "Self-serve signup",
+        "description": "Allow new users to create accounts without admin help."
+      },
+      "expected_relationship": "DISTINCT",
+      "brief_gold_rationale": "Bulk admin provisioning vs self-serve signup are different flows.",
+      "tags": ["admin"],
+      "difficulty": "medium"
+    },
+    {
+      "case_id": "relationship-014",
+      "request_a": {
+        "title": "Comment @mentions",
+        "description": "Users want to @mention teammates in discussion threads."
+      },
+      "request_b": {
+        "title": "In-app notifications center",
+        "description": "Central place to see mentions, assignments, and updates."
+      },
+      "expected_relationship": "RELATED",
+      "brief_gold_rationale": "Mentions typically feed a notifications experience.",
+      "tags": ["collaboration"],
+      "difficulty": "easy"
+    },
+    {
+      "case_id": "relationship-015",
+      "request_a": {
+        "title": "iPad responsive layout",
+        "description": "Make core workflows usable on iPad screen sizes."
+      },
+      "request_b": {
+        "title": "Native iOS app",
+        "description": "Ship a dedicated iOS application in the App Store."
+      },
+      "expected_relationship": "RELATED",
+      "brief_gold_rationale": "Mobile access needs but responsive web vs native app differ.",
+      "tags": ["mobile"],
+      "difficulty": "medium"
+    },
+    {
+      "case_id": "relationship-016",
+      "request_a": {
+        "title": "Keyboard shortcuts",
+        "description": "Power users want keyboard shortcuts for common navigation."
+      },
+      "request_b": {
+        "title": "Customizable home dashboard",
+        "description": "Let users rearrange widgets on their landing page."
+      },
+      "expected_relationship": "DISTINCT",
+      "brief_gold_rationale": "Shortcuts vs dashboard customization are separate UX improvements.",
+      "tags": ["ux"],
+      "difficulty": "medium"
+    },
+    {
+      "case_id": "relationship-017",
+      "request_a": {
+        "title": "Webhook event delivery",
+        "description": "Send webhook callbacks when records change for automation tools."
+      },
+      "request_b": {
+        "title": "Zapier connector",
+        "description": "Provide a Zapier integration for no-code automations."
+      },
+      "expected_relationship": "RELATED",
+      "brief_gold_rationale": "Automation exposure via webhooks vs packaged Zapier connector.",
+      "tags": ["integrations"],
+      "difficulty": "medium"
+    },
+    {
+      "case_id": "relationship-018",
+      "request_a": {
+        "title": "PDF invoice download",
+        "description": "Billing admins need PDF invoices for accounting."
+      },
+      "request_b": {
+        "title": "Monthly finance analytics in Excel",
+        "description": "Finance needs monthly analytics in Excel to reconcile outside the platform."
+      },
+      "expected_relationship": "DISTINCT",
+      "brief_gold_rationale": "Both mention finance artifacts but invoicing PDFs vs analytics export are different needs.",
+      "tags": ["false-merge-risk", "reporting"],
+      "difficulty": "hard"
+    }
+  ]
+}

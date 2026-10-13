@@ -1,0 +1,77 @@
+{
+  "dataset_version": "themes_v1",
+  "cases": [
+    {
+      "case_id": "theme-001",
+      "title": "Export reports to CSV",
+      "description": "Operations needs CSV export of dashboard reporting for offline analysis.",
+      "expected_theme": "REPORTING_AND_DATA"
+    },
+    {
+      "case_id": "theme-002",
+      "title": "Monthly finance analytics in Excel",
+      "description": "Finance needs monthly analytics in Excel to reconcile outside the platform.",
+      "expected_theme": "REPORTING_AND_DATA"
+    },
+    {
+      "case_id": "theme-003",
+      "title": "Enterprise SSO",
+      "description": "Customers need SAML/OIDC login through corporate identity providers.",
+      "expected_theme": "AUTHENTICATION_AND_ACCESS"
+    },
+    {
+      "case_id": "theme-004",
+      "title": "Role-based access control",
+      "description": "Admins need granular roles and permissions inside the application.",
+      "expected_theme": "AUTHENTICATION_AND_ACCESS"
+    },
+    {
+      "case_id": "theme-005",
+      "title": "Salesforce integration",
+      "description": "Sync accounts and opportunities with Salesforce CRM.",
+      "expected_theme": "INTEGRATIONS_AND_AUTOMATION"
+    },
+    {
+      "case_id": "theme-006",
+      "title": "Slack notifications",
+      "description": "Send important product events to a Slack channel.",
+      "expected_theme": "COLLABORATION_AND_NOTIFICATIONS"
+    },
+    {
+      "case_id": "theme-007",
+      "title": "Keyboard shortcuts",
+      "description": "Power users want keyboard shortcuts for common navigation actions.",
+      "expected_theme": "USER_EXPERIENCE"
+    },
+    {
+      "case_id": "theme-008",
+      "title": "Native iOS app",
+      "description": "Ship a dedicated iOS application for field workflows.",
+      "expected_theme": "MOBILE"
+    },
+    {
+      "case_id": "theme-009",
+      "title": "Audit log export",
+      "description": "Compliance teams need exportable audit logs for governance reviews.",
+      "expected_theme": "ADMINISTRATION_AND_GOVERNANCE"
+    },
+    {
+      "case_id": "theme-010",
+      "title": "Improve dashboard load time",
+      "description": "Large dashboards are slow to load; need faster rendering.",
+      "expected_theme": "PERFORMANCE_AND_RELIABILITY"
+    },
+    {
+      "case_id": "theme-011",
+      "title": "Custom mascot on login page",
+      "description": "Marketing wants a seasonal mascot illustration on the login screen.",
+      "expected_theme": "OTHER"
+    },
+    {
+      "case_id": "theme-012",
+      "title": "Webhook retries",
+      "description": "Failed webhook deliveries should retry with backoff for automation partners.",
+      "expected_theme": "INTEGRATIONS_AND_AUTOMATION"
+    }
+  ]
+}

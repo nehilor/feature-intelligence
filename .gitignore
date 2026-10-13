@@ -75,5 +75,9 @@ tmp/
 temp/
 .cache/
 
+# Local evaluation outputs (fixtures/datasets remain in source control)
+backend/evals/results/*
+!backend/evals/results/.gitkeep
+
 # Docker (future)
 docker-compose.override.yml

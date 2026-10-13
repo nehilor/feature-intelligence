@@ -1,0 +1,77 @@
+{
+  "fixture_version": "underlying_need_predictions_v1",
+  "predictions": [
+    {
+      "case_id": "need-001",
+      "predicted_concepts": [
+        "finance reconciliation",
+        "reporting outside the product",
+        "recurring monthly analysis"
+      ],
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "need-002",
+      "predicted_concepts": [
+        "export reporting data",
+        "offline analysis",
+        "spreadsheet workflow"
+      ],
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "need-003",
+      "predicted_concepts": [
+        "enterprise authentication",
+        "identity provider",
+        "SSO login"
+      ],
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "need-004",
+      "predicted_concepts": [
+        "team notifications",
+        "Slack channel alerts",
+        "activity awareness"
+      ],
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "need-005",
+      "predicted_concepts": [
+        "visual comfort",
+        "dark theme",
+        "nighttime usage"
+      ],
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "need-006",
+      "predicted_concepts": [
+        "CRM sync",
+        "Salesforce",
+        "sales workflow automation"
+      ],
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "need-007",
+      "predicted_concepts": [
+        "performance",
+        "faster dashboard load",
+        "large dataset handling"
+      ],
+      "structured_output_valid": true
+    },
+    {
+      "case_id": "need-008",
+      "predicted_concepts": [
+        "permissions",
+        "role-based access",
+        "admin governance"
+      ],
+      "structured_output_valid": true
+    }
+  ]
+}

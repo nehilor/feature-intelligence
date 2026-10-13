@@ -1,6 +1,6 @@
 # Feature Intelligence
 
-**Status:** SPEC-001 through SPEC-005 are implemented. SPEC-006 remains planned.
+**Status:** SPEC-001 through SPEC-006 are implemented for this technical assessment.
 
 ## Problem statement
 
@@ -30,14 +30,13 @@ Raw feature request
 
 **AI interprets evidence. Deterministic systems enforce business rules. Humans make consequential product decisions.**
 
-## Core functional requirements (planned)
+## Core capabilities
 
-When implementation begins, users should be able to:
-
-1. Submit a feature request with title and description.
-2. View and discover existing requests.
-3. Express support or interest in an existing request.
-4. Understand how requests are grouped, evaluated, or prioritized.
+1. Submit, discover, search, and support feature requests.
+2. AI feature triage (theme, underlying need, impact, urgency).
+3. Semantic relationship intelligence (DUPLICATE / RELATED / DISTINCT).
+4. Deterministic priority scoring with human strategic alignment.
+5. AI-assisted decision brief and human product decisions (with decision-time audit snapshot).
 
 ## AI-first approach
 
@@ -47,21 +46,24 @@ AI is used to interpret unstructured request text: extract underlying needs, cla
 
 The system is designed so AI never deletes requests, merges records, sets final roadmap outcomes, overrides deterministic scores, or sends stakeholder communications without explicit human approval. Product owners review briefs and approve or override decisions.
 
-## Proposed technical architecture
+## Technical architecture
 
-| Layer | Planned stack |
+| Layer | Stack |
 | --- | --- |
 | Frontend | React, TypeScript, Vite |
-| Backend | Python, FastAPI, Pydantic |
-| Challenge persistence | SQLite |
-| Production evolution | PostgreSQL + pgvector |
-| AI | Provider abstraction, embeddings, structured outputs, deterministic priority engine, graceful degradation |
+| Backend | Python, FastAPI, Pydantic, SQLAlchemy |
+| Persistence | SQLite (assessment) |
+| AI | OpenAI primary, Gemini 2.5 Flash fallback; OpenAI embeddings; structured outputs |
+| Evaluation | Offline golden datasets + frozen fixtures (`make eval`); optional live eval |
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/AI-DESIGN.md](docs/AI-DESIGN.md), [docs/SECURITY-AND-RELIABILITY.md](docs/SECURITY-AND-RELIABILITY.md), and [docs/EVALUATION.md](docs/EVALUATION.md) for detail.
 
-## Evaluation philosophy
+## Evaluation
 
-Quality will be measured with golden datasets and explicit metrics (precision, recall, accuracy, structured-output success, latency, manual-review rate) once AI components exist. No evaluation results are claimed at this stage.
+- **`make eval`** — offline, deterministic regression on golden datasets and frozen predictions (no API credits).
+- **`make eval-live`** — optional live provider benchmark when credentials are configured.
+
+See [docs/EVALUATION.md](docs/EVALUATION.md). Offline fixture metrics validate the harness; they are **not** live model quality claims.
 
 ## Security and reliability principles
 
@@ -152,7 +154,14 @@ Health check: `GET http://localhost:8000/api/health` → `{"status":"ok"}`
 make verify
 ```
 
-Runs backend lint/tests and frontend lint/typecheck/tests.
+Runs backend lint/tests and frontend lint/typecheck/tests (no AI provider calls).
+
+Additional offline commands:
+
+```bash
+make eval          # golden-set regression on frozen predictions
+make demo-reset    # destructive local SQLite reset + baseline seed
+```
 
 ### Demo seed (SPEC-002)
 
@@ -235,18 +244,26 @@ cd backend && .venv/bin/python scripts/live_embedding_smoke.py
 
 **Human override:** `ProductDecision` preserves the system recommendation; overrides store separate reviewer priority and reason without rewriting `PriorityAssessment`.
 
-Not implemented yet: evaluation harness, golden datasets, or `make eval` (SPEC-006).
+### AI evaluation and submission (SPEC-006)
+
+- Golden datasets: `backend/evals/datasets/` (`relationships_v1`, `themes_v1`, `underlying_needs_v1`)
+- Offline runner: `make eval` (frozen predictions, confusion matrix, DUPLICATE precision/recall, theme accuracy, concept coverage)
+- Live runner: `make eval-live` (opt-in; `EVAL_MAX_CASES` optional)
+- Demo: `make demo-reset`, `make demo-setup-canonical` — see [docs/DEMO.md](docs/DEMO.md)
+- Submission checklist: [docs/SUBMISSION.md](docs/SUBMISSION.md)
 
 ## Current status
 
-**Implemented:**
+**Implemented:** [SPEC-001](specs/SPEC-001-project-foundation.md) through [SPEC-006](specs/SPEC-006-ai-evaluation-and-submission-hardening.md).
 
-- [SPEC-001](specs/SPEC-001-project-foundation.md) — application foundation, `/api/health`, `make verify`
-- [SPEC-002](specs/SPEC-002-feature-request-core.md) — feature requests, deterministic search, anonymous support, demo seed
-- [SPEC-003](specs/SPEC-003-ai-feature-triage.md) — AI Feature Triage, provider abstraction, structured analysis persistence
-- [SPEC-004](specs/SPEC-004-semantic-relationship-intelligence.md) — embeddings, semantic retrieval, relationship classification
-- [SPEC-005](specs/SPEC-005-priority-and-human-decision-workflow.md) — deterministic priority, decision brief, human product decisions
+## Why AI / what stays deterministic / human-controlled
 
-**Planned (not implemented):** [SPEC-006](specs/SPEC-006-ai-evaluation-and-submission-hardening.md) — evaluation harness and submission hardening.
+| Layer | Role |
+| --- | --- |
+| AI | Interprets request text; themes, needs, relationships, decision brief prose |
+| Deterministic | Priority formula (`priority_formula_v1`), support/relationship counting, schema validation |
+| Human | Strategic alignment, product decision (approve/override/defer/reject), override preserved at decision time |
 
-Implementation continues **spec-by-spec** in order.
+## Production evolution (documented, not implemented)
+
+SQLite → PostgreSQL; in-process cosine similarity → pgvector ANN; background jobs where needed; real auth/multi-tenancy; larger labeled eval sets; provider cost telemetry.
