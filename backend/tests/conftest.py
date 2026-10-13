@@ -9,6 +9,7 @@ os.environ.setdefault("APP_ENV", "test")
 os.environ.setdefault("DATABASE_URL", "sqlite:///:memory:")
 os.environ.setdefault("AI_ENABLED", "false")
 
+from app.ai.embeddings.registry import clear_embedding_provider
 from app.ai.providers.registry import clear_provider_registry
 from app.core.config import get_settings
 from app.main import create_app
@@ -19,9 +20,11 @@ from app.persistence.database import init_database, reset_database
 def _clear_settings_cache() -> Generator[None, None, None]:
     get_settings.cache_clear()
     clear_provider_registry()
+    clear_embedding_provider()
     yield
     get_settings.cache_clear()
     clear_provider_registry()
+    clear_embedding_provider()
     reset_database()
 
 

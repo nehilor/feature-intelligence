@@ -8,9 +8,15 @@ import {
 } from '../api/featureAnalysis'
 import { getFeatureRequest, supportFeatureRequest } from '../api/featureRequests'
 import { FeatureAnalysisPanel } from '../components/FeatureAnalysisPanel'
+import { RelatedRequestsPanel } from '../components/RelatedRequestsPanel'
+import {
+  analyzeFeatureRelationships,
+  getFeatureRelationships,
+} from '../api/featureRelationships'
 import { getSupporterKey } from '../lib/supporterKey'
 import type { FeatureAnalysisResponse } from '../types/featureAnalysis'
 import type { FeatureRequest } from '../types/featureRequest'
+import type { RelationshipsResponse } from '../types/featureRelationships'
 
 export function DetailPage() {
   const { requestId } = useParams()
@@ -23,6 +29,11 @@ export function DetailPage() {
   const [analysisError, setAnalysisError] = useState<string | null>(null)
   const [supporting, setSupporting] = useState(false)
   const autoAnalyzeAttempted = useRef(false)
+  const [relationships, setRelationships] = useState<RelationshipsResponse | null>(null)
+  const [relationshipsLoading, setRelationshipsLoading] = useState(true)
+  const [relationshipsRunning, setRelationshipsRunning] = useState(false)
+  const [relationshipsError, setRelationshipsError] = useState<string | null>(null)
+  const [relationshipsAnalyzed, setRelationshipsAnalyzed] = useState(false)
 
   const reload = async () => {
     if (!requestId) return
@@ -57,6 +68,21 @@ export function DetailPage() {
       return null
     } finally {
       setAnalysisLoading(false)
+    }
+  }, [requestId])
+
+  const runRelationships = useCallback(async () => {
+    if (!requestId) return
+    setRelationshipsRunning(true)
+    setRelationshipsError(null)
+    try {
+      const data = await analyzeFeatureRelationships(requestId)
+      setRelationships(data)
+      setRelationshipsAnalyzed(true)
+    } catch {
+      setRelationshipsError('Unable to analyze related requests.')
+    } finally {
+      setRelationshipsRunning(false)
     }
   }, [requestId])
 
@@ -125,6 +151,37 @@ export function DetailPage() {
     }
   }, [requestId, loadAnalysis])
 
+  useEffect(() => {
+    if (!requestId) return
+    let cancelled = false
+    async function loadRelated() {
+      const id = requestId
+      if (!id) return
+      setRelationshipsLoading(true)
+      setRelationshipsError(null)
+      try {
+        const data = await getFeatureRelationships(id)
+        if (!cancelled) {
+          setRelationships(data)
+          if (data.items.length > 0 || data.message) {
+            setRelationshipsAnalyzed(true)
+          }
+        }
+      } catch {
+        if (!cancelled) {
+          setRelationshipsError('Unable to load related requests.')
+          setRelationships(null)
+        }
+      } finally {
+        if (!cancelled) setRelationshipsLoading(false)
+      }
+    }
+    void loadRelated()
+    return () => {
+      cancelled = true
+    }
+  }, [requestId])
+
   const onSupport = async () => {
     if (!requestId) return
     setSupporting(true)
@@ -174,6 +231,14 @@ export function DetailPage() {
         running={runningAnalysis}
         error={analysisError}
         onRunAnalysis={() => void runAnalysis()}
+      />
+      <RelatedRequestsPanel
+        data={relationships}
+        loading={relationshipsLoading}
+        running={relationshipsRunning}
+        error={relationshipsError}
+        hasAnalyzed={relationshipsAnalyzed}
+        onAnalyze={() => void runRelationships()}
       />
     </section>
   )

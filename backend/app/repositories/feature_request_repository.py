@@ -27,6 +27,10 @@ class FeatureRequestRepository:
     def get_by_id(self, request_id: str) -> Optional[FeatureRequest]:
         return self._session.get(FeatureRequest, request_id)
 
+    def list_all(self) -> list[FeatureRequest]:
+        stmt = select(FeatureRequest).order_by(FeatureRequest.created_at.asc())
+        return list(self._session.scalars(stmt).all())
+
     def list_requests(
         self,
         *,

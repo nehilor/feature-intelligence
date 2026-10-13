@@ -1,6 +1,6 @@
 # Feature Intelligence
 
-**Status:** SPEC-001 foundation, SPEC-002 feature request core, and SPEC-003 AI Feature Triage are implemented. SPEC-004+ remain planned.
+**Status:** SPEC-001 through SPEC-004 are implemented. SPEC-005–006 remain planned.
 
 ## Problem statement
 
@@ -201,7 +201,26 @@ cd backend && .venv/bin/python scripts/live_triage_smoke.py
 
 Requires `OPENAI_API_KEY` and `OPENAI_MODEL` in the environment. Skips safely when unset.
 
-Not implemented yet: embeddings, semantic duplicate detection, priority scoring, decision briefs, or evaluation harness (SPEC-004–006).
+### Semantic relationship intelligence (SPEC-004)
+
+- `POST /api/feature-requests/{id}/relationships/analyze` — embedding, cosine-similarity Top K retrieval, LLM relationship classification
+- `GET /api/feature-requests/{id}/relationships` — persisted relationship evidence
+
+**Embeddings:** OpenAI (`OPENAI_EMBEDDING_MODEL`, default `text-embedding-3-small`), JSON-serialized vectors in SQLite, content-hash reuse.
+
+**Retrieval:** In-process cosine similarity, `SEMANTIC_MIN_CANDIDATE_SCORE` (default `0.50`), `SEMANTIC_TOP_K` (default `5`). Similarity ranks candidates; the LLM adjudicates `DUPLICATE` / `RELATED` / `DISTINCT` (`relationship_classification_v1`).
+
+**Providers:** Relationship classification reuses OpenAI primary + Gemini fallback (failover only).
+
+**Safety:** No automatic merge, delete, or support transfer. `DUPLICATE` is advisory evidence only.
+
+**Optional live embedding smoke (not part of `make verify`):**
+
+```bash
+cd backend && .venv/bin/python scripts/live_embedding_smoke.py
+```
+
+Not implemented yet: priority scoring, decision briefs, final product decisions, or evaluation harness (SPEC-005–006).
 
 ## Current status
 
@@ -210,7 +229,8 @@ Not implemented yet: embeddings, semantic duplicate detection, priority scoring,
 - [SPEC-001](specs/SPEC-001-project-foundation.md) — application foundation, `/api/health`, `make verify`
 - [SPEC-002](specs/SPEC-002-feature-request-core.md) — feature requests, deterministic search, anonymous support, demo seed
 - [SPEC-003](specs/SPEC-003-ai-feature-triage.md) — AI Feature Triage, provider abstraction, structured analysis persistence
+- [SPEC-004](specs/SPEC-004-semantic-relationship-intelligence.md) — embeddings, semantic retrieval, relationship classification
 
-**Planned (not implemented):** [SPEC-004](specs/SPEC-004-semantic-relationship-intelligence.md) through [SPEC-006](specs/SPEC-006-ai-evaluation-and-submission-hardening.md) — semantic relationships, priority/decisions, evaluation harness.
+**Planned (not implemented):** [SPEC-005](specs/SPEC-005-priority-and-human-decision-workflow.md) and [SPEC-006](specs/SPEC-006-ai-evaluation-and-submission-hardening.md) — priority/decisions and evaluation harness.
 
 Implementation continues **spec-by-spec** in order.

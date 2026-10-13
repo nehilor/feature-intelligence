@@ -121,3 +121,56 @@ class AIExecution(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=utcnow, nullable=False
     )
+
+
+class FeatureEmbedding(Base):
+    __tablename__ = "feature_embeddings"
+    __table_args__ = (UniqueConstraint("feature_request_id", name="uq_feature_embedding_request"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    feature_request_id: Mapped[str] = mapped_column(
+        String(36),
+        ForeignKey("feature_requests.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    embedding: Mapped[str] = mapped_column(Text, nullable=False)
+    provider: Mapped[str] = mapped_column(String(32), nullable=False)
+    model: Mapped[str] = mapped_column(String(128), nullable=False)
+    content_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=utcnow, nullable=False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=utcnow,
+        onupdate=utcnow,
+        nullable=False,
+    )
+
+
+class RequestRelationship(Base):
+    __tablename__ = "request_relationships"
+    __table_args__ = (
+        UniqueConstraint("request_a_id", "request_b_id", name="uq_request_relationship_pair"),
+    )
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    request_a_id: Mapped[str] = mapped_column(String(36), nullable=False, index=True)
+    request_b_id: Mapped[str] = mapped_column(String(36), nullable=False, index=True)
+    relationship: Mapped[str] = mapped_column(String(32), nullable=False)
+    similarity_score: Mapped[float] = mapped_column(nullable=False)
+    confidence: Mapped[str] = mapped_column(String(32), nullable=False)
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+    provider: Mapped[str] = mapped_column(String(32), nullable=False)
+    model: Mapped[str] = mapped_column(String(128), nullable=False)
+    prompt_version: Mapped[str] = mapped_column(String(64), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=utcnow, nullable=False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=utcnow,
+        onupdate=utcnow,
+        nullable=False,
+    )
