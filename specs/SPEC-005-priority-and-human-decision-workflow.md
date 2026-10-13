@@ -370,11 +370,27 @@ DISTINCT
 
 toward demand.
 
-The implementation may weight `DUPLICATE` and `RELATED` differently if documented and tested.
+Under **`priority_formula_v1`** (assessment default), relationship scoring is fixed:
 
-For the initial assessment, a simple count is preferred unless weighting clearly improves explainability.
+```text
+relationship_signal_count =
+  number of persisted DUPLICATE + RELATED relationships
+```
 
-Do not count the same logical relationship twice.
+Rules:
+
+- each qualifying logical relationship contributes **one** signal
+- `DISTINCT` contributes **zero**
+- duplicate logical pairs MUST be counted only once
+- do **not** apply differentiated weights between `DUPLICATE` and `RELATED` in v1
+
+Then:
+
+```text
+relationship_score = min(15, relationship_signal_count * 5)
+```
+
+Differentiated weighting, if ever needed, belongs in a future `priority_formula_v2` or later ADR — not in v1.
 
 ---
 
@@ -1364,15 +1380,19 @@ The decision remains within Feature Intelligence.
 
 ## 48. Demo Scenario
 
-Existing request:
+Canonical demo flow: the reviewer **newly submits** (not seeded):
 
 ```text
+Title:
 Monthly finance analytics in Excel
 
+Description:
 Our finance team needs monthly analytics in Excel so they can reconcile results outside the platform.
 ```
 
-Assume:
+After submission, AI triage and semantic relationship analysis run against the seeded catalog (Export reports to CSV, Download dashboard data, Dark mode, Slack notifications, Enterprise SSO — the finance request itself is **not** pre-seeded).
+
+For the **scoring demonstration**, use the evidence state once the request exists and relationships are classified:
 
 ```text
 support_count = 4
@@ -1382,6 +1402,8 @@ customer_impact = HIGH
 urgency = LOW
 strategic_alignment = HIGH
 ```
+
+The four direct supporters are the count **after** the request exists (demo walkthrough, test fixture, or scripted support actions — not a pre-existing seeded copy of this request).
 
 Using the recommended formula:
 

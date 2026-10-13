@@ -66,8 +66,21 @@ This is intentionally **not** an autonomous multi-agent swarm: one orchestrator,
 
 ## Provider abstraction
 
-- Interface covers: chat/completions with schema, embeddings, timeouts, and optional streaming (if needed later).
-- Configuration: model names, API base URL, keys via environment — never committed.
+Assessment provider strategy (see SPEC-003–006):
+
+| Role | Provider |
+| --- | --- |
+| Primary LLM | OpenAI |
+| Fallback LLM | Gemini 2.5 Flash (eligible failures only; not routine dual calls) |
+| Embeddings | OpenAI |
+
+- Provider SDK details stay inside adapters; domain code uses internal interfaces and validated models.
+- OpenAI model, Gemini model, and embedding model are **environment-configurable**.
+- Credentials are environment-driven; never committed.
+- Normal automated tests use mocks/fakes and MUST NOT require live provider access by default.
+- Do not add separate provider infrastructure (proxy services, multi-vendor routing layers) beyond this abstraction.
+
+Interface covers: chat/completions with schema, embeddings, timeouts, and optional streaming (if needed later).
 
 ## Retry and fallback
 

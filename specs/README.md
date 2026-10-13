@@ -4,19 +4,25 @@ Implementation in this repository is driven by **numbered, executable specificat
 
 ## Process
 
-1. **Design phase (current):** Architecture and cross-cutting docs live under [docs/](../docs/). No numbered specs are required yet.
-2. **Spec authoring:** Each feature or vertical slice gets a spec file such as `001-feature-request-submission.md`.
-3. **Approval:** A human approves the spec (objective, acceptance criteria, and out-of-scope sections) before implementation starts.
-4. **Implementation:** Agents and developers implement exactly one approved spec at a time, per [AGENTS.md](../AGENTS.md).
-5. **Verification:** Acceptance criteria and listed tests must pass before the spec is marked done.
+1. **Design phase:** Architecture and cross-cutting docs live under [docs/](../docs/). Numbered executable specs define implementation slices.
+2. **Approval:** Each spec’s objective, acceptance criteria, and out-of-scope sections are approved before implementation of that spec.
+3. **Implementation:** Agents and developers implement exactly one spec at a time, per [AGENTS.md](../AGENTS.md).
+4. **Verification:** Acceptance criteria and listed tests must pass before the spec is marked done.
 
-## Numbering
+## Approved implementation sequence
 
-Use zero-padded three-digit prefixes in filename order of dependency or priority, for example:
+Implement in strict order — do not skip ahead:
 
-- `001-...` foundational data model and API skeleton
-- `002-...` feature request submission
-- `003-...` semantic discovery and classification
+| Order | Spec | Title |
+| --- | --- | --- |
+| 1 | [SPEC-001-project-foundation.md](SPEC-001-project-foundation.md) | Project Foundation |
+| 2 | [SPEC-002-feature-request-core.md](SPEC-002-feature-request-core.md) | Feature Request Core |
+| 3 | [SPEC-003-ai-feature-triage.md](SPEC-003-ai-feature-triage.md) | AI Feature Triage |
+| 4 | [SPEC-004-semantic-relationship-intelligence.md](SPEC-004-semantic-relationship-intelligence.md) | Semantic Relationship Intelligence |
+| 5 | [SPEC-005-priority-and-human-decision-workflow.md](SPEC-005-priority-and-human-decision-workflow.md) | Priority & Human Decision Workflow |
+| 6 | [SPEC-006-ai-evaluation-and-submission-hardening.md](SPEC-006-ai-evaluation-and-submission-hardening.md) | AI Evaluation & Submission Hardening |
+
+**Order:** SPEC-001 → SPEC-002 → SPEC-003 → SPEC-004 → SPEC-005 → SPEC-006.
 
 Renumbering is avoided once a spec is approved; supersede with a new spec and reference the old one if requirements change materially.
 
@@ -86,4 +92,4 @@ Concrete completion signals (merged code, passing CI, docs updated, ADR if neede
 
 ---
 
-**Note:** No numbered specification files exist yet. Do not implement application code until the first spec is approved.
+Implementation has not started yet; begin with **SPEC-001** when ready.

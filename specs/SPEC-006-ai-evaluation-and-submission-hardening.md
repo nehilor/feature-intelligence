@@ -923,7 +923,9 @@ Slack notifications
 Enterprise SSO
 ```
 
-with sensible support counts.
+Do **not** include “Monthly finance analytics in Excel” in the initial seed; that request is submitted fresh during the canonical demo.
+
+Seed the five requests above with sensible support counts where useful for search and relationship demos.
 
 The dataset should be useful for demonstrating:
 
@@ -975,6 +977,20 @@ AI decision brief generated
       ↓
 human reviewer approves or overrides
 ```
+
+### Scoring demonstration state
+
+After the new request is submitted and triaged, the canonical priority demo reaches:
+
+```text
+support_count = 4
+relationship_signal_count = 2
+customer_impact = HIGH
+urgency = LOW
+strategic_alignment = HIGH (human-provided)
+```
+
+Under `priority_formula_v1`, that yields total **78** and priority **HIGH** (see SPEC-005 §48). The four supporters are accumulated **after** submission (demo steps, fixtures, or integration setup — not by seeding the finance request upfront).
 
 ---
 

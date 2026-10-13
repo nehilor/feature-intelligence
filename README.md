@@ -104,7 +104,7 @@ Not in scope for this assessment:
 
 ## Current status
 
-- **Done:** Architecture documentation, agent governance, specification process definition, ADR placeholder
-- **Not started:** Frontend, backend, database migrations, Docker, dependencies, numbered specs, tests, or deployed environments
+- **Done:** Architecture and design documentation; agent governance; executable specifications **SPEC-001** through **SPEC-006** (see [specs/](specs/README.md))
+- **Not started:** Application implementation — no runtime frontend/backend, dependencies, migrations, tests, or deployed environments yet
 
-Implementation will follow approved specs in [specs/](specs/README.md) after this design phase.
+Implementation will proceed **spec-by-spec** in order (SPEC-001 → SPEC-006). No product or AI functionality should be claimed until the relevant spec is implemented and verified.

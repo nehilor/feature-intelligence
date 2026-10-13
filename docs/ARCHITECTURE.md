@@ -31,7 +31,8 @@ This document describes the **planned** high-level architecture for Feature Inte
 ### AI orchestration
 
 - A **Feature Triage Agent** — bounded workflow, not an autonomous multi-agent system.
-- Steps: need extraction → embedding/index update → semantic search → relationship classification → theme classification → signal aggregation hook → priority engine → decision brief generation.
+- End-to-end product flow (canonical order): raw feature request → AI feature triage → underlying need extraction → theme classification → semantic candidate retrieval → DUPLICATE / RELATED / DISTINCT classification → signal aggregation → deterministic priority score → AI decision brief → human product decision.
+- Orchestration steps align with that order across later specs (triage and theme before retrieval/classification; scoring and brief after evidence is assembled).
 - Agent may call **tools** (see [AI-DESIGN.md](AI-DESIGN.md)); it does not execute destructive or final product actions.
 
 ### Embeddings
@@ -98,9 +99,10 @@ flowchart LR
 ## Data flow (triage)
 
 1. API persists a new or updated request.
-2. Orchestration runs AI steps (need, theme, retrieval, relationship, brief) with validated structured outputs.
-3. Engine computes priority from deterministic inputs.
-4. API exposes aggregated view to UI; flags `AI_PARTIAL` or `MANUAL_REVIEW_REQUIRED` when needed.
-5. Human approves or overrides; outcome stored as the authoritative product decision for that cycle.
+2. AI feature triage extracts underlying need and theme (validated structured outputs).
+3. Semantic candidate retrieval and DUPLICATE / RELATED / DISTINCT classification run on related evidence.
+4. Signal aggregation feeds the deterministic priority engine.
+5. AI decision brief is generated from accumulated evidence; API flags `AI_PARTIAL` or `MANUAL_REVIEW_REQUIRED` when needed.
+6. Human product decision (approve / override / defer / reject) is recorded separately from the immutable score recommendation.
 
-Future specs will define exact entities, endpoints, and state machines.
+Numbered specs define exact entities, endpoints, and state machines.
