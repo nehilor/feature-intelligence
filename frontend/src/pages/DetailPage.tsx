@@ -7,7 +7,21 @@ import {
   getFeatureAnalysis,
 } from '../api/featureAnalysis'
 import { getFeatureRequest, supportFeatureRequest } from '../api/featureRequests'
+import { calculatePriority, getPriority, PriorityNotFoundError } from '../api/priority'
+import {
+  DecisionBriefNotFoundError,
+  generateDecisionBrief,
+  getDecisionBrief,
+} from '../api/decisionBrief'
+import {
+  DecisionNotFoundError,
+  getProductDecision,
+  submitProductDecision,
+} from '../api/productDecision'
+import { DecisionBriefPanel } from '../components/DecisionBriefPanel'
 import { FeatureAnalysisPanel } from '../components/FeatureAnalysisPanel'
+import { PriorityPanel } from '../components/PriorityPanel'
+import { ProductDecisionPanel } from '../components/ProductDecisionPanel'
 import { RelatedRequestsPanel } from '../components/RelatedRequestsPanel'
 import {
   analyzeFeatureRelationships,
@@ -17,6 +31,9 @@ import { getSupporterKey } from '../lib/supporterKey'
 import type { FeatureAnalysisResponse } from '../types/featureAnalysis'
 import type { FeatureRequest } from '../types/featureRequest'
 import type { RelationshipsResponse } from '../types/featureRelationships'
+import type { DecisionBriefResponse } from '../types/decisionBrief'
+import type { PriorityAssessmentResponse, StrategicAlignment } from '../types/priority'
+import type { ProductDecisionResponse } from '../types/productDecision'
 
 export function DetailPage() {
   const { requestId } = useParams()
@@ -34,6 +51,19 @@ export function DetailPage() {
   const [relationshipsRunning, setRelationshipsRunning] = useState(false)
   const [relationshipsError, setRelationshipsError] = useState<string | null>(null)
   const [relationshipsAnalyzed, setRelationshipsAnalyzed] = useState(false)
+  const [priority, setPriority] = useState<PriorityAssessmentResponse | null>(null)
+  const [priorityLoading, setPriorityLoading] = useState(true)
+  const [priorityCalculating, setPriorityCalculating] = useState(false)
+  const [priorityError, setPriorityError] = useState<string | null>(null)
+  const [strategicAlignment, setStrategicAlignment] = useState<StrategicAlignment>('UNKNOWN')
+  const [brief, setBrief] = useState<DecisionBriefResponse | null>(null)
+  const [briefLoading, setBriefLoading] = useState(true)
+  const [briefGenerating, setBriefGenerating] = useState(false)
+  const [briefError, setBriefError] = useState<string | null>(null)
+  const [decision, setDecision] = useState<ProductDecisionResponse | null>(null)
+  const [decisionLoading, setDecisionLoading] = useState(true)
+  const [decisionSubmitting, setDecisionSubmitting] = useState(false)
+  const [decisionError, setDecisionError] = useState<string | null>(null)
 
   const reload = async () => {
     if (!requestId) return
@@ -182,6 +212,130 @@ export function DetailPage() {
     }
   }, [requestId])
 
+  useEffect(() => {
+    if (!requestId) return
+    let cancelled = false
+    void (async (id: string) => {
+      setPriorityLoading(true)
+      setPriorityError(null)
+      try {
+        const data = await getPriority(id)
+        if (!cancelled) {
+          setPriority(data)
+          setStrategicAlignment(data.strategic_alignment)
+        }
+      } catch (err) {
+        if (!cancelled && !(err instanceof PriorityNotFoundError)) {
+          setPriorityError('Unable to load priority.')
+        }
+        if (!cancelled && err instanceof PriorityNotFoundError) {
+          setPriority(null)
+        }
+      } finally {
+        if (!cancelled) setPriorityLoading(false)
+      }
+    })(requestId)
+    return () => {
+      cancelled = true
+    }
+  }, [requestId])
+
+  useEffect(() => {
+    if (!requestId) return
+    let cancelled = false
+    void (async (id: string) => {
+      setBriefLoading(true)
+      setBriefError(null)
+      try {
+        const data = await getDecisionBrief(id)
+        if (!cancelled) setBrief(data)
+      } catch (err) {
+        if (!cancelled && !(err instanceof DecisionBriefNotFoundError)) {
+          setBriefError('Unable to load decision brief.')
+        }
+        if (!cancelled && err instanceof DecisionBriefNotFoundError) {
+          setBrief(null)
+        }
+      } finally {
+        if (!cancelled) setBriefLoading(false)
+      }
+    })(requestId)
+    return () => {
+      cancelled = true
+    }
+  }, [requestId])
+
+  useEffect(() => {
+    if (!requestId) return
+    let cancelled = false
+    void (async (id: string) => {
+      setDecisionLoading(true)
+      setDecisionError(null)
+      try {
+        const data = await getProductDecision(id)
+        if (!cancelled) setDecision(data)
+      } catch (err) {
+        if (!cancelled && !(err instanceof DecisionNotFoundError)) {
+          setDecisionError('Unable to load product decision.')
+        }
+        if (!cancelled && err instanceof DecisionNotFoundError) {
+          setDecision(null)
+        }
+      } finally {
+        if (!cancelled) setDecisionLoading(false)
+      }
+    })(requestId)
+    return () => {
+      cancelled = true
+    }
+  }, [requestId])
+
+  const onCalculatePriority = async () => {
+    if (!requestId) return
+    setPriorityCalculating(true)
+    setPriorityError(null)
+    try {
+      const data = await calculatePriority(requestId, strategicAlignment)
+      setPriority(data)
+    } catch {
+      setPriorityError('Unable to calculate priority.')
+    } finally {
+      setPriorityCalculating(false)
+    }
+  }
+
+  const onGenerateBrief = async () => {
+    if (!requestId) return
+    setBriefGenerating(true)
+    setBriefError(null)
+    try {
+      const data = await generateDecisionBrief(requestId)
+      setBrief(data)
+    } catch (err) {
+      if (err instanceof Error && err.message === 'decision_brief_unavailable') {
+        setBriefError('decision_brief_unavailable')
+      } else {
+        setBriefError('Unable to generate decision brief.')
+      }
+    } finally {
+      setBriefGenerating(false)
+    }
+  }
+
+  const onSubmitDecision = async (payload: Parameters<typeof submitProductDecision>[1]) => {
+    if (!requestId) return
+    setDecisionSubmitting(true)
+    setDecisionError(null)
+    try {
+      const data = await submitProductDecision(requestId, payload)
+      setDecision(data)
+    } catch {
+      setDecisionError('Unable to submit product decision.')
+    } finally {
+      setDecisionSubmitting(false)
+    }
+  }
+
   const onSupport = async () => {
     if (!requestId) return
     setSupporting(true)
@@ -239,6 +393,31 @@ export function DetailPage() {
         error={relationshipsError}
         hasAnalyzed={relationshipsAnalyzed}
         onAnalyze={() => void runRelationships()}
+      />
+      <PriorityPanel
+        priority={priority}
+        loading={priorityLoading}
+        calculating={priorityCalculating}
+        error={priorityError}
+        strategicAlignment={strategicAlignment}
+        onStrategicAlignmentChange={setStrategicAlignment}
+        onCalculate={() => void onCalculatePriority()}
+      />
+      <DecisionBriefPanel
+        brief={brief}
+        loading={briefLoading}
+        generating={briefGenerating}
+        error={briefError}
+        priorityReady={priority !== null}
+        onGenerate={() => void onGenerateBrief()}
+      />
+      <ProductDecisionPanel
+        priority={priority}
+        decision={decision}
+        loading={decisionLoading}
+        submitting={decisionSubmitting}
+        error={decisionError}
+        onSubmit={(payload) => void onSubmitDecision(payload)}
       />
     </section>
   )

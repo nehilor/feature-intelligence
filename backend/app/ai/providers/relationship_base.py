@@ -27,5 +27,4 @@ class RelationshipProvider(Protocol):
         self,
         target: RelationshipRequestContext,
         candidate: RelationshipRequestContext,
-    ) -> RelationshipCallResult:
-        ...
+    ) -> RelationshipCallResult: ...

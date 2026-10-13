@@ -63,8 +63,7 @@ class FeatureRequestService:
             offset=resolved_offset,
         )
         items = [
-            self._to_response(request, support_count=count, supporter_key=supporter_key)
-            for request, count in rows
+            self._to_response(request, support_count=count, supporter_key=supporter_key) for request, count in rows
         ]
         return FeatureRequestListResponse(
             items=items,

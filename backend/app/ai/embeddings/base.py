@@ -13,5 +13,4 @@ class EmbeddingProvider(Protocol):
     provider_name: str
     model: str
 
-    def embed_text(self, text: str) -> EmbeddingResult:
-        ...
+    def embed_text(self, text: str) -> EmbeddingResult: ...

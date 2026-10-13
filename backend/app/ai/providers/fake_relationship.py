@@ -10,9 +10,9 @@ from app.schemas.relationship import RelationshipClassificationOutput
 class FakeRelationshipProvider:
     provider_name: str
     model: str
-    behavior: Optional[
-        Callable[[RelationshipRequestContext, RelationshipRequestContext], RelationshipCallResult]
-    ] = None
+    behavior: Optional[Callable[[RelationshipRequestContext, RelationshipRequestContext], RelationshipCallResult]] = (
+        None
+    )
     call_count: int = 0
 
     def classify_relationship(

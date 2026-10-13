@@ -1,4 +1,4 @@
-import { cleanup, render, screen, waitFor } from '@testing-library/react'
+import { cleanup, render, screen, waitFor, within } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -6,9 +6,17 @@ import { DetailPage } from './DetailPage'
 import { AnalysisNotFoundError } from '../api/featureAnalysis'
 import * as featureAnalysisApi from '../api/featureAnalysis'
 import * as featureRequestsApi from '../api/featureRequests'
+import * as featureRelationshipsApi from '../api/featureRelationships'
+import * as priorityApi from '../api/priority'
+import * as decisionBriefApi from '../api/decisionBrief'
+import * as productDecisionApi from '../api/productDecision'
 
 vi.mock('../api/featureRequests')
 vi.mock('../api/featureAnalysis')
+vi.mock('../api/featureRelationships')
+vi.mock('../api/priority')
+vi.mock('../api/decisionBrief')
+vi.mock('../api/productDecision')
 
 const mockRequest = {
   id: 'req-1',
@@ -39,6 +47,18 @@ describe('DetailPage AI analysis', () => {
 
   beforeEach(() => {
     vi.mocked(featureRequestsApi.getFeatureRequest).mockResolvedValue(mockRequest)
+    vi.mocked(featureRelationshipsApi.getFeatureRelationships).mockResolvedValue({
+      feature_request_id: 'req-1',
+      status: 'ok',
+      items: [],
+    })
+    vi.mocked(priorityApi.getPriority).mockRejectedValue(new priorityApi.PriorityNotFoundError())
+    vi.mocked(decisionBriefApi.getDecisionBrief).mockRejectedValue(
+      new decisionBriefApi.DecisionBriefNotFoundError(),
+    )
+    vi.mocked(productDecisionApi.getProductDecision).mockRejectedValue(
+      new productDecisionApi.DecisionNotFoundError(),
+    )
     vi.mocked(featureAnalysisApi.analyzeFeatureRequest).mockResolvedValue({
       feature_request_id: 'req-1',
       processing_state: 'MANUAL_REVIEW_REQUIRED',
@@ -59,7 +79,8 @@ describe('DetailPage AI analysis', () => {
     })
     expect(screen.getByText(mockRequest.description)).toBeInTheDocument()
     await waitFor(() => {
-      expect(screen.getByText('Not analyzed yet.')).toBeInTheDocument()
+      const analysisSection = screen.getByRole('heading', { name: 'AI Analysis' }).parentElement
+      expect(within(analysisSection!).getByText('Not analyzed yet.')).toBeInTheDocument()
     })
   })
 
@@ -75,7 +96,8 @@ describe('DetailPage AI analysis', () => {
     await waitFor(() => {
       expect(screen.getByText(/Manual review is required/i)).toBeInTheDocument()
     })
-    expect(screen.queryByText('Not analyzed yet.')).not.toBeInTheDocument()
+    const analysisSection = screen.getByRole('heading', { name: 'AI Analysis' }).parentElement
+    expect(within(analysisSection!).queryByText('Not analyzed yet.')).not.toBeInTheDocument()
   })
 
   it('displays successful analysis fields', async () => {

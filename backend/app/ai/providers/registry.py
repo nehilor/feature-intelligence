@@ -5,8 +5,11 @@ from google import genai
 from openai import OpenAI
 
 from app.ai.providers.base import AIProvider
+from app.ai.providers.decision_brief_base import DecisionBriefProvider
+from app.ai.providers.gemini_decision_brief_provider import GeminiDecisionBriefProvider
 from app.ai.providers.gemini_provider import GeminiProvider
 from app.ai.providers.gemini_relationship_provider import GeminiRelationshipProvider
+from app.ai.providers.openai_decision_brief_provider import OpenAIDecisionBriefProvider
 from app.ai.providers.openai_provider import OpenAIProvider
 from app.ai.providers.openai_relationship_provider import OpenAIRelationshipProvider
 from app.ai.providers.relationship_base import RelationshipProvider
@@ -19,6 +22,8 @@ class ProviderRegistry:
     gemini: Optional[AIProvider]
     openai_relationship: Optional[RelationshipProvider] = None
     gemini_relationship: Optional[RelationshipProvider] = None
+    openai_decision_brief: Optional[DecisionBriefProvider] = None
+    gemini_decision_brief: Optional[DecisionBriefProvider] = None
 
 
 _registry_override: Optional[ProviderRegistry] = None
@@ -44,6 +49,8 @@ def build_provider_registry(settings: Settings) -> ProviderRegistry:
 
     openai_relationship: Optional[RelationshipProvider] = None
     gemini_relationship: Optional[RelationshipProvider] = None
+    openai_decision_brief: Optional[DecisionBriefProvider] = None
+    gemini_decision_brief: Optional[DecisionBriefProvider] = None
 
     if settings.openai_api_key and settings.openai_model:
         openai_client = OpenAI(api_key=settings.openai_api_key, timeout=timeout)
@@ -53,6 +60,7 @@ def build_provider_registry(settings: Settings) -> ProviderRegistry:
             timeout_seconds=timeout,
         )
         openai_relationship = OpenAIRelationshipProvider(openai_client, settings.openai_model)
+        openai_decision_brief = OpenAIDecisionBriefProvider(openai_client, settings.openai_model)
     if settings.gemini_api_key:
         gemini_provider = GeminiProvider(
             api_key=settings.gemini_api_key,
@@ -64,11 +72,14 @@ def build_provider_registry(settings: Settings) -> ProviderRegistry:
             http_options={"timeout": timeout * 1000},
         )
         gemini_relationship = GeminiRelationshipProvider(gemini_client, settings.gemini_model)
+        gemini_decision_brief = GeminiDecisionBriefProvider(gemini_client, settings.gemini_model)
     return ProviderRegistry(
         openai=openai_provider,
         gemini=gemini_provider,
         openai_relationship=openai_relationship,
         gemini_relationship=gemini_relationship,
+        openai_decision_brief=openai_decision_brief,
+        gemini_decision_brief=gemini_decision_brief,
     )
 
 

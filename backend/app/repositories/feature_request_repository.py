@@ -71,9 +71,7 @@ class FeatureRequestRepository:
         return [(row[0], int(row[1])) for row in rows], int(total)
 
     def count_support(self, request_id: str) -> int:
-        stmt = select(func.count(SupportSignal.id)).where(
-            SupportSignal.feature_request_id == request_id
-        )
+        stmt = select(func.count(SupportSignal.id)).where(SupportSignal.feature_request_id == request_id)
         return int(self._session.scalar(stmt) or 0)
 
     def has_support(self, request_id: str, supporter_key: str) -> bool:

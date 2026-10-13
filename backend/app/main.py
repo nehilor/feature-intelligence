@@ -9,6 +9,9 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.api.feature_analysis import router as feature_analysis_router
+from app.api.feature_decision import router as feature_decision_router
+from app.api.feature_decision_brief import router as feature_decision_brief_router
+from app.api.feature_priority import router as feature_priority_router
 from app.api.feature_relationships import router as feature_relationships_router
 from app.api.feature_requests import router as feature_requests_router
 from app.api.health import router as health_router
@@ -45,6 +48,9 @@ def create_app() -> FastAPI:
     app.include_router(feature_requests_router, prefix="/api")
     app.include_router(feature_analysis_router, prefix="/api")
     app.include_router(feature_relationships_router, prefix="/api")
+    app.include_router(feature_priority_router, prefix="/api")
+    app.include_router(feature_decision_brief_router, prefix="/api")
+    app.include_router(feature_decision_router, prefix="/api")
 
     @app.exception_handler(StarletteHTTPException)
     async def http_exception_handler(_request: Request, exc: StarletteHTTPException):

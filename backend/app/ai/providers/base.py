@@ -16,5 +16,4 @@ class ProviderCallResult:
 class AIProvider(Protocol):
     provider_name: str
 
-    def analyze_feature_request(self, title: str, description: str) -> ProviderCallResult:
-        ...
+    def analyze_feature_request(self, title: str, description: str) -> ProviderCallResult: ...

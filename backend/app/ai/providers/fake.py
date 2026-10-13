@@ -10,9 +10,7 @@ from app.schemas.triage import TriageAnalysisOutput
 def _default_output() -> TriageAnalysisOutput:
     return TriageAnalysisOutput(
         summary="Finance users need easier access to reporting data outside the platform.",
-        underlying_need=(
-            "Finance teams need reporting data for external reconciliation and downstream analysis."
-        ),
+        underlying_need=("Finance teams need reporting data for external reconciliation and downstream analysis."),
         theme=Theme.REPORTING_AND_DATA,
         customer_impact=CustomerImpact.HIGH,
         urgency=Urgency.UNKNOWN,

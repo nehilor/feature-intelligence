@@ -23,9 +23,7 @@ def test_content_hash_stable() -> None:
 def test_content_change_changes_hash() -> None:
     base = build_canonical_embedding_text("A", "B")
     changed = build_canonical_embedding_text("A", "B updated")
-    assert compute_embedding_content_hash("openai", "m", base) != compute_embedding_content_hash(
-        "openai", "m", changed
-    )
+    assert compute_embedding_content_hash("openai", "m", base) != compute_embedding_content_hash("openai", "m", changed)
 
 
 def test_model_change_changes_hash() -> None:

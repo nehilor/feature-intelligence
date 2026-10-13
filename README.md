@@ -1,6 +1,6 @@
 # Feature Intelligence
 
-**Status:** SPEC-001 through SPEC-004 are implemented. SPEC-005–006 remain planned.
+**Status:** SPEC-001 through SPEC-005 are implemented. SPEC-006 remains planned.
 
 ## Problem statement
 
@@ -220,7 +220,22 @@ Requires `OPENAI_API_KEY` and `OPENAI_MODEL` in the environment. Skips safely wh
 cd backend && .venv/bin/python scripts/live_embedding_smoke.py
 ```
 
-Not implemented yet: priority scoring, decision briefs, final product decisions, or evaluation harness (SPEC-005–006).
+### Priority and human decision workflow (SPEC-005)
+
+- `POST /api/feature-requests/{id}/priority` — calculate/recalculate deterministic priority (client sends **human** `strategic_alignment` only)
+- `GET /api/feature-requests/{id}/priority` — current `PriorityAssessment` (404 `priority_not_found` when not yet assessed)
+- `POST /api/feature-requests/{id}/decision-brief` — AI-assisted brief from trusted persisted evidence
+- `GET /api/feature-requests/{id}/decision-brief` — current brief (404 `decision_brief_not_found`)
+- `POST /api/feature-requests/{id}/decision` — human `APPROVED` / `OVERRIDDEN` / `DEFERRED` / `REJECTED`
+- `GET /api/feature-requests/{id}/decision` — current decision (404 `decision_not_found`)
+
+**Deterministic scoring (`priority_formula_v1`, max 100):** demand (support + DUPLICATE/RELATED signals, max 40), customer impact from validated triage (max 25), urgency from triage (max 15), strategic alignment from human input only (max 20). Priority levels: 0–39 LOW, 40–69 MEDIUM, 70–100 HIGH. No LLM calls during scoring.
+
+**Decision brief:** `decision_brief_v1` structured output; OpenAI primary, Gemini fallback; failures do not alter priority scores.
+
+**Human override:** `ProductDecision` preserves the system recommendation; overrides store separate reviewer priority and reason without rewriting `PriorityAssessment`.
+
+Not implemented yet: evaluation harness, golden datasets, or `make eval` (SPEC-006).
 
 ## Current status
 
@@ -230,7 +245,8 @@ Not implemented yet: priority scoring, decision briefs, final product decisions,
 - [SPEC-002](specs/SPEC-002-feature-request-core.md) — feature requests, deterministic search, anonymous support, demo seed
 - [SPEC-003](specs/SPEC-003-ai-feature-triage.md) — AI Feature Triage, provider abstraction, structured analysis persistence
 - [SPEC-004](specs/SPEC-004-semantic-relationship-intelligence.md) — embeddings, semantic retrieval, relationship classification
+- [SPEC-005](specs/SPEC-005-priority-and-human-decision-workflow.md) — deterministic priority, decision brief, human product decisions
 
-**Planned (not implemented):** [SPEC-005](specs/SPEC-005-priority-and-human-decision-workflow.md) and [SPEC-006](specs/SPEC-006-ai-evaluation-and-submission-hardening.md) — priority/decisions and evaluation harness.
+**Planned (not implemented):** [SPEC-006](specs/SPEC-006-ai-evaluation-and-submission-hardening.md) — evaluation harness and submission hardening.
 
 Implementation continues **spec-by-spec** in order.
