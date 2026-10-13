@@ -1,0 +1,2 @@
+2026-10-13T08:32:00-06:00 | User requested CLAUDE.md in project root with Project Rules and Prompt Logging section. Created CLAUDE.md with the specified content and initialized prompts.txt with this entry.
+2026-10-13T08:36:00-06:00 | User requested Feature Intelligence design-phase repo structure only (no app code/deps). Created README.md, AGENTS.md, .gitignore, docs (ARCHITECTURE, AI-DESIGN, EVALUATION, SECURITY-AND-RELIABILITY, adr/), and specs/README.md; left CLAUDE.md unchanged.
