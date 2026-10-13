@@ -11,3 +11,4 @@
 2026-10-13T11:35:00-06:00 | Implemented SPEC-005 only: priority_formula_v1 PriorityService, PriorityAssessment, decision_brief_v1 with OpenAI/Gemini failover, ProductDecision workflow, APIs, detail UI panels, backend/frontend tests, README; make verify offline; no commit.
 2026-10-13T11:40:00-06:00 | SPEC-005 auditability fix: immutable system recommendation snapshot on ProductDecision at decision time; GET/response from snapshot not live assessment; UI and tests for 78 vs recalc 83; no commit.
 2026-10-13T11:55:00-06:00 | Implemented SPEC-006: evals package, golden datasets, frozen fixtures, make eval/eval-live, demo-reset/demo-setup-canonical, docs DEMO/SUBMISSION/EVALUATION, README finalization; make verify+eval offline; no commit.
+2026-10-13T12:00:00-06:00 | Final submission readiness audit (clean-room, secrets, demo 78, docs): fixed .gitignore blocking frontend/src/lib/supporterKey.ts; full verify/eval/demo checks; report §29; no commit/push.
