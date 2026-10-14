@@ -1,6 +1,6 @@
-import type { ProductDecisionCreate, ProductDecisionResponse } from '../types/productDecision'
+import { getApiBaseUrl } from '../config'
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? ''
+import type { ProductDecisionCreate, ProductDecisionResponse } from '../types/productDecision'
 
 export class DecisionNotFoundError extends Error {
   constructor() {
@@ -10,7 +10,7 @@ export class DecisionNotFoundError extends Error {
 }
 
 export async function getProductDecision(requestId: string): Promise<ProductDecisionResponse> {
-  const response = await fetch(`${API_BASE}/api/feature-requests/${requestId}/decision`)
+  const response = await fetch(`${getApiBaseUrl()}/api/feature-requests/${requestId}/decision`)
   if (response.status === 404) {
     const body = (await response.json()) as { detail?: string }
     if (body.detail === 'decision_not_found') {
@@ -27,7 +27,7 @@ export async function submitProductDecision(
   requestId: string,
   payload: ProductDecisionCreate,
 ): Promise<ProductDecisionResponse> {
-  const response = await fetch(`${API_BASE}/api/feature-requests/${requestId}/decision`, {
+  const response = await fetch(`${getApiBaseUrl()}/api/feature-requests/${requestId}/decision`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),

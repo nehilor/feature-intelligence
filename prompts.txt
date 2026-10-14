@@ -12,3 +12,9 @@
 2026-10-13T11:40:00-06:00 | SPEC-005 auditability fix: immutable system recommendation snapshot on ProductDecision at decision time; GET/response from snapshot not live assessment; UI and tests for 78 vs recalc 83; no commit.
 2026-10-13T11:55:00-06:00 | Implemented SPEC-006: evals package, golden datasets, frozen fixtures, make eval/eval-live, demo-reset/demo-setup-canonical, docs DEMO/SUBMISSION/EVALUATION, README finalization; make verify+eval offline; no commit.
 2026-10-13T12:00:00-06:00 | Final submission readiness audit (clean-room, secrets, demo 78, docs): fixed .gitignore blocking frontend/src/lib/supporterKey.ts; full verify/eval/demo checks; report §29; no commit/push.
+2026-10-13T15:43:00-06:00 | User asked to run local demo servers: inspected README/Makefile/config; confirmed SQLite path; started make backend-dev and make frontend-dev; verified health and API connectivity; no demo-reset; no code changes.
+2026-10-13T15:46:00-06:00 | User asked when browser is ready; confirmed dev servers still running and pointed to http://localhost:5173.
+2026-10-13T15:50:00-06:00 | Real AI E2E smoke audit: no local .env; all provider keys missing on running backend; triage/embedding/relationship/brief blocked; diagnosed MANUAL_REVIEW_REQUIRED as unconfigured providers; HTTP API confirmed; no code changes.
+2026-10-13T15:52:00-06:00 | User requested .env creation with all non-secret values; OPENAI_MODEL=gpt-4.1-mini, GEMINI 2.5 Flash; empty API key placeholders.
+2026-10-13T15:54:00-06:00 | User added AI keys; restarted make backend-dev and make frontend-dev; verified health and provider registry loaded.
+2026-10-13T16:13:00-06:00 | Fixed priority/decision-brief/product-decision API clients to use getApiBaseUrl (same as analysis); backend priority was OK.
