@@ -1,6 +1,6 @@
-import type { PriorityAssessmentResponse, StrategicAlignment } from '../types/priority'
+import { getApiBaseUrl } from '../config'
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? ''
+import type { PriorityAssessmentResponse, StrategicAlignment } from '../types/priority'
 
 export class PriorityNotFoundError extends Error {
   constructor() {
@@ -10,7 +10,7 @@ export class PriorityNotFoundError extends Error {
 }
 
 export async function getPriority(requestId: string): Promise<PriorityAssessmentResponse> {
-  const response = await fetch(`${API_BASE}/api/feature-requests/${requestId}/priority`)
+  const response = await fetch(`${getApiBaseUrl()}/api/feature-requests/${requestId}/priority`)
   if (response.status === 404) {
     const body = (await response.json()) as { detail?: string }
     if (body.detail === 'priority_not_found') {
@@ -27,7 +27,7 @@ export async function calculatePriority(
   requestId: string,
   strategicAlignment: StrategicAlignment,
 ): Promise<PriorityAssessmentResponse> {
-  const response = await fetch(`${API_BASE}/api/feature-requests/${requestId}/priority`, {
+  const response = await fetch(`${getApiBaseUrl()}/api/feature-requests/${requestId}/priority`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ strategic_alignment: strategicAlignment }),
